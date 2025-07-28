@@ -5,13 +5,14 @@ apply plugin: 'com.google.firebase.crashlytics'
 
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileOptions {
-        sourceCompatibility 1.8
-        targetCompatibility 1.8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
-    compileSdkVersion 33
+    compileSdk 34 // 33 → 34로 업그레이드 권장
     buildToolsVersion "33.0.0"
     defaultConfig {
         applicationId "com.tradingview.lightweightcharts.example"
@@ -29,6 +30,9 @@ android {
     }
     buildFeatures {
         viewBinding true
+    }
+    kotlinOptions {
+        jvmTarget = "17"
     }
 
     namespace 'com.tradingview.lightweightcharts.example.app'
@@ -53,4 +57,21 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.6.0"
     implementation 'com.github.permissions-dispatcher:permissionsdispatcher:4.8.0'
     kapt 'com.github.permissions-dispatcher:permissionsdispatcher-processor:4.8.0'
+    
+    // Hilt 의존성 주입
+    implementation 'com.google.dagger:hilt-android:2.48'
+    kapt 'com.google.dagger:hilt-compiler:2.48'
+    
+    // Retrofit (한국투자 API용)
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.11.0'
+    
+    // Fragment KTX
+    implementation 'androidx.fragment:fragment-ktx:1.6.2'
+    
+    // Room 데이터베이스는 나중에 구현 예정
+    // implementation 'androidx.room:room-runtime:2.5.0'
+    // implementation 'androidx.room:room-ktx:2.5.0'
+    // kapt 'androidx.room:room-compiler:2.5.0'
 }

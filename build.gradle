@@ -1,5 +1,5 @@
 buildscript {
-    ext.kotlin_version = '1.8.0'
+    ext.kotlin_version = '1.9.25'
     repositories {
         google()
         mavenCentral()
@@ -8,17 +8,17 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.2.2' // 8.1.4 → 8.2.2
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath 'com.google.gms:google-services:4.3.15'
-        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.4'
+        classpath 'com.google.gms:google-services:4.4.0'
+        classpath 'com.google.firebase:firebase-crashlytics-gradle:2.9.9'
+        classpath 'com.google.dagger:hilt-android-gradle-plugin:2.48'
     }
 }
 
 plugins {
-    id "io.gitlab.arturbosch.detekt" version "1.18.1"
+    id "io.gitlab.arturbosch.detekt" version "1.23.4" // 1.18.1 → 1.23.4
 }
-
 detekt {
     source = files(".")
     buildUponDefaultConfig = false

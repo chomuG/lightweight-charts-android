@@ -3,8 +3,18 @@ apply plugin: 'kotlin-android'
 apply plugin: 'maven-publish'
 
 android {
-    compileSdkVersion 33
+    compileSdk 34 // 33 → 34로 업그레이드 권장
     buildToolsVersion "33.0.0"
+
+    // 이 부분을 추가
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 
     defaultConfig {
         /*
@@ -21,7 +31,6 @@ android {
         versionCode 16
         versionName "4.0.0"
 
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -33,16 +42,15 @@ android {
         }
     }
     namespace 'com.tradingview.lightweightcharts'
-
 }
 
+// 나머지는 동일...
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.webkit:webkit:1.6.0'
     implementation 'com.google.code.gson:gson:2.9.1'
 }
-
 import org.apache.tools.ant.taskdefs.condition.Os
 
 def evaluateShellScript(String ... script) {

@@ -32,20 +32,28 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         WebView.setWebContentsDebuggingEnabled(true)
-        setContentView(ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root)
+        setContentView(
+            ActivityMainBinding.inflate(layoutInflater).also { binding = it }.root
+        )
         initializeNavigationDrawer()
         startFragment(ChartTypeFragment::class.java, false)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when {
-            actionBar.onOptionsItemSelected(item) -> true
-            else -> super.onOptionsItemSelected(item)
+        return if (actionBar.onOptionsItemSelected(item)) {
+            true
+        } else {
+            super.onOptionsItemSelected(item)
         }
     }
 
     private fun initializeNavigationDrawer() {
-        actionBar = ActionBarDrawerToggle(context, binding.drawerLayout, R.string.open, R.string.close)
+        actionBar = ActionBarDrawerToggle(
+            context,
+            binding.drawerLayout,
+            R.string.open,
+            R.string.close
+        )
         binding.drawerLayout.addDrawerListener(actionBar)
         actionBar.syncState()
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -63,8 +71,22 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_data -> startFragment(SeriesDataFragment::class.java)
                 R.id.menu_realtime_emulator -> startFragment(RealTimeEmulationFragment::class.java)
                 R.id.menu_indicators_and_markers -> startFragment(IndicatorsAndMarkersFragment::class.java)
+                R.id.menu_professional_chart_test -> startFragment(ProfessionalChartTestFragment::class.java)
+                R.id.menu_professional_chart -> {
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            ProfessionalChartMultiPanelActivity::class.java
+                        )
+                    )
+                }
                 R.id.menu_view_pager -> {
-                    startActivity(Intent(this@MainActivity, ViewPagerActivity::class.java))
+                    startActivity(
+                        Intent(
+                            this@MainActivity,
+                            ViewPagerActivity::class.java
+                        )
+                    )
                 }
             }
             binding.drawerLayout.closeDrawers()
@@ -83,23 +105,25 @@ class MainActivity : AppCompatActivity() {
 
     private fun <T : Fragment> startFragment(
         fragmentClass: Class<T>,
-        shouldAddToBackStack: Boolean = true,
+        shouldAddToBackStack: Boolean = true
     ) {
-        supportFragmentManager
-            .beginTransaction().apply {
-                replace(
-                    R.id.fragment_container_fl,
-                    FragmentFactory.getInstance(fragmentClass)
-                )
-                if (shouldAddToBackStack) {
-                    addToBackStack(null)
-                }
-                commit()
-            }
+        supportFragmentManager.beginTransaction().apply {
+            replace(
+                R.id.fragment_container_fl,
+                FragmentFactory.getInstance(fragmentClass)
+            )
+            if (shouldAddToBackStack) addToBackStack(null)
+            commit()
+        }
     }
 
     private fun updateTitle() {
-        (supportFragmentManager.findFragmentById(R.id.fragment_container_fl) as? ITitleFragment)?.fragmentTitleRes
-            ?.let { title -> setTitle(title) }
+        (supportFragmentManager
+            .findFragmentById(R.id.fragment_container_fl) as? ITitleFragment)
+            ?.fragmentTitleRes
+            ?.takeIf { it != 0 }
+            ?.let { resId ->
+                supportActionBar?.title = getString(resId)
+            }
     }
 }
